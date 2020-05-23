@@ -8,13 +8,13 @@ Word2VecSeq2SeqBaseLine
 通过Greedy search或者Beam search的方法跑出测试结果
 
 # 二. 功能实现  
-1、原始数据AutoMaster_TestSet.csv和AutoMaster_TrainSet.csv都只保留50条，便于快速调试跑通模型
-2、在encoder.py中实现encoder层
-3、在decoder.py中实现decoder层
-4、 在attention.py中实现attention层
-5、在seq2seq.py中实现seq2seq模型
+1、原始数据AutoMaster_TestSet.csv和AutoMaster_TrainSet.csv都只保留50条，便于快速调试跑通模型  
+2、在encoder.py中实现encoder层  
+3、在decoder.py中实现decoder层  
+4、 在attention.py中实现attention层  
+5、在seq2seq.py中实现seq2seq模型  
 6、在losses.py中定义loss函数  
-7、 实现train和test功能（修改main_activity.py中parse的mode参数实现train还是test）
+7、 实现train和test功能（修改main_activity.py中parse的mode参数实现train还是test）  
 
 # 三. 代码使用说明  
 1. 第一步：clean data：执行clean_data.py  
