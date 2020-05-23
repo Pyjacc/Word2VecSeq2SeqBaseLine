@@ -18,13 +18,13 @@ import re
 
 # 1. 数据路径
 REMOVE_WORDS = ['|', '[', ']', '语音', '图片']      # 自定义要从训练集和测试集中去除的无用词
-train_data_path = "./data/AutoMaster_TrainSet.csv"
-test_data_path = "./data/AutoMaster_TestSet.csv"
-stop_words_path = "./data/哈工大停用词表.txt"
+train_data_path = "./dataDdebug/AutoMaster_TrainSet.csv"
+test_data_path = "./dataDdebug/AutoMaster_TestSet.csv"
+stop_words_path = "./dataDdebug/哈工大停用词表.txt"
 
-train_data_x_save_path = "./data/train_set_seg_x.txt"
-train_data_y_save_path = "./data/train_set_seg_y.txt"
-test_data_x_save_path = "./data/test_set_seg_x.txt"
+train_data_x_save_path = "./dataDdebug/train_set_seg_x.txt"
+train_data_y_save_path = "./dataDdebug/train_set_seg_y.txt"
+test_data_x_save_path = "./dataDdebug/test_set_seg_x.txt"
 
 
 

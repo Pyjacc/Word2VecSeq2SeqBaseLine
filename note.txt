@@ -1,0 +1,16 @@
+1. 第一步：clean data,执行clean_data.py
+2. 第二步：build vocab.txt，执行build_vocab_dict.py
+3. 第三步：构建embedding_matrix, 执行train_word2vec_model.py
+4. 第四步：修改run.py中params["mode"] == "train"，开始训练
+5. 第五步：修改run.py中params["mode"] == "test"，开始预测
+
+
+注：当本次train时改变模型的维度，如vocab_size改变,embed_size改变，都要删除原模型数据后（ckpt下的数据）
+再进行训练和测试
+
+
+
+
+
+
+

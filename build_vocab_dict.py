@@ -11,11 +11,11 @@ from collections import defaultdict
 
 
 # 加载数据的路径
-train_data_x_path = "./data/train_set_seg_x.txt"
-train_data_y_path = "./data/train_set_seg_y.txt"
-test_data_x_path = "./data/test_set_seg_x.txt"
-save_vocab_path = "./data/vocab.txt"
-save_reverse_vocab_path = "./data/reverse_vocab.txt"
+train_data_x_path = "./dataDdebug/train_set_seg_x.txt"
+train_data_y_path = "./dataDdebug/train_set_seg_y.txt"
+test_data_x_path = "./dataDdebug/test_set_seg_x.txt"
+save_vocab_path = "./dataDdebug/vocab.txt"
+save_reverse_vocab_path = "./dataDdebug/reverse_vocab.txt"
 
 
 def load_data(train_data_x_path, train_data_y_path, test_data_x_path):
@@ -24,7 +24,7 @@ def load_data(train_data_x_path, train_data_y_path, test_data_x_path):
          open(test_data_x_path, mode="r", encoding="utf-8") as f_test_data_x:
         words = []
         for line in f_data_x:
-            words += line.split(" ")
+            words += line.split(" ")        #第一次也要用“+”,不然只会读取到第二个和第三个文件进行拼接
 
         for line in f_data_y:
             words += line.split(" ")

@@ -9,13 +9,14 @@ def batch_greedy_decode(model, enc_data, vocab, params):
     batch_data = enc_data[0]["enc_input"]
     batch_size = enc_data[0]["enc_input"].shape[0]
     # 开辟结果存储list
-    predicts = [''] * batch_size
+    predicts = [''] * batch_size    #训练的时候时一个batch_size扔进去的,测试的时候时一个一个样本测试的,所以测试时要乘以batch_size
     inputs = batch_data
 
     enc_output, enc_hidden = model.encoder(inputs)
     dec_hidden = enc_hidden
-#这里解释下为什么要有一个batch_size,因为训练得时候是按照一个batch size扔进去得，所以得到得模型得输入结构也是如此，因此在测试得时候相当于将单个样本
-#乘以batch size那么多遍，然后再得到结果，结果区list得第一个即可，当然理论上list得内容是一样得
+    # 这里解释下为什么要有乘以batch_size：因为训练的时候是按照一个batch_size扔进去的，所以得到的模型的输入结构也是如此，
+    # 在测试的时候,单个样本要乘以batch size那么多遍，然后再得到结果
+    # x = placeholder[batch_size, sequence_len, embedding_dim]训练时的输入结构,（测试时也要一次输入batch_size的大小）
     dec_input = tf.constant([vocab.word_to_id('[START]')] * batch_size)
     dec_input = tf.expand_dims(dec_input, axis=1)
     # print('enc_output shape is :',enc_output.get_shape())

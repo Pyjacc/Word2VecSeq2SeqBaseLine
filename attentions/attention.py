@@ -15,7 +15,7 @@ class BahdanauAttention(tf.keras.layers.Layer):
 
 
     # 计算score和context vector
-    def call(self, enc_output, dec_hidden):
+    def call(self, dec_hidden, enc_output):
         '''
         输入：
             enc_output:encoder层输出,维度为(batch_size, seq_len, embedding_dim),即
@@ -52,7 +52,8 @@ class BahdanauAttention(tf.keras.layers.Layer):
         # 输入(样本)序列最大长度句子的长度(max_seq_len)是输入的长度
         # 因为我们想为每个输入长度分配一个权重,所以softmax应该用作用在第一个轴(max_seq_len)上,因而axis = 1
         # (softmax默认被应用于最后一个轴axis = -1)
-        attention_weights = tf.nn.softmax(self.V(score), axis=1)  #(batch_size, seq_len, 1)
+        # attention_weights = tf.nn.softmax(self.V(score), axis=1)  #(batch_size, seq_len, 1)
+        attention_weights = tf.nn.softmax(score, axis=1)
 
 
         # enc_output (batch_size, enc_len, enc_units)

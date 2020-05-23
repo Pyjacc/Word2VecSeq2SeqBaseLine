@@ -12,6 +12,7 @@ class Encoder(tf.keras.Model):
         self.enc_units = enc_units      # 编码器中gru层中隐藏层神经元数量(通常与词向量维度embedding_dim大小相等)
         self.use_bi_gru = True          #是否使用双向gru
 
+        # 双向gru
         if self.use_bi_gru:
             self.enc_units = self.enc_units // 2
 
@@ -61,10 +62,3 @@ class Encoder(tf.keras.Model):
             output, enc_hidden = self.gru(enc_input_embedded, initial_state=initial_state)
 
         return output, enc_hidden
-
-
-# 调用Encoder:
-# encoder = Encoder(vocab_size, embedding_dim, embedding_matrix, enc_units, batch_size)  # 实例化encoder
-# enc_output, enc_hidden_state = encoder.call(enc_input) # 样本输入
-# print ('Encoder output shape: (batch_size, seq_len, embedding_dim) {}'.format(enc_output.shape)) #(64, 16, 1024)
-# print ('Encoder Hidden state shape: (batch_size, embedding_dim) {}'.format(enc_hidden_state.shape)) #(64, 1024)

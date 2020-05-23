@@ -12,19 +12,19 @@ from utils.data_utils import dump_pkl
 import time
 import numpy as np
 
-VOCAB_SIZE = 10000
+VOCAB_SIZE = 30000
 EMBEDDING_DIM = 256
 
 # 加载数据的路径
-train_x_seg_path = "./data/train_set_seg_x.txt"
-train_y_seg_path = "./data/train_set_seg_y.txt"
-test_x_seg_path = "./data/test_set_seg_x.txt"
-vocab_path = "./data/vocab.txt"         #为调通代码,可只保留vocab.txt中很少的一部分进行调试
+train_x_seg_path = "./dataDdebug/train_set_seg_x.txt"
+train_y_seg_path = "./dataDdebug/train_set_seg_y.txt"
+test_x_seg_path = "./dataDdebug/test_set_seg_x.txt"
+vocab_path = "./dataDdebug/vocab.txt"         #为调通代码,可只保留vocab.txt中很少的一部分进行调试
 
-sentence_path = './data/sentences.txt'  #用于训练词向量的数据
-w2v_bin_path = "./data/w2v.model"       #保存为model或bin文件都行
+sentence_path = './dataDdebug/sentences.txt'  #用于训练词向量的数据
+w2v_bin_path = "./dataDdebug/w2v.model"       #保存为model或bin文件都行
 # w2v_bin_path = "./data/w2v.bin"
-save_model_txt_path = "./data/word2vec.txt"
+save_model_txt_path = "./dataDdebug/word2vec.txt"
 
 
 '''
@@ -123,12 +123,13 @@ def load_save_model(w2v_bin_path, vocab_path, save_txt_path):
     # for word in skip_gram_model.wv.vocab:
     #     word_dict[word] = skip_gram_model[word]     #字典word_dict中的存储形式为： 词:词对应的词向量
 
+    # 构建embedding_matrix
     vocab = Vocab(vocab_path, VOCAB_SIZE)
     for word, index in vocab.word2id.items():
         #注：若要使用腾讯的词向量,只要在加载skip_gram_model时w2v_bin_path用腾讯词向量的路径
         #但是上面vocab_path还是要用自己的vocab.txt文件的路径
         if word in skip_gram_model.wv.vocab:    #构建embedding层
-            word_dict[index] = skip_gram_model[word]
+            word_dict[index] = skip_gram_model[word]        # 即为后面所用到的embedding_matrix
         else:
             #随机初始化,值的大小为-0.025到0.025,词向量维度为256
             word_dict[index] = np.random.uniform(-0.025, 0.025, (EMBEDDING_DIM))

@@ -140,13 +140,15 @@ def get_dec_inp_targ_seqs(sequence, max_len, start_id, stop_id):
       inp: sequence length <=max_len starting with start_id
       target: sequence same length as input, ending with stop_id only if there was no truncation
     """
-    inp = [start_id] + sequence[:]
+    inp = [start_id] + sequence[:]      #添加开始标记
     target = sequence[:]
-    if len(inp) > max_len:  # truncate
+    if len(inp) > max_len:  # truncate：截断
         inp = inp[:max_len]
         target = target[:max_len]  # no end_token
     else:  # no truncation
-        target.append(stop_id)  # end token
+        #此处应该添加pad操作,补齐长度
+
+        target.append(stop_id)  # end token：添加结束标记
     assert len(inp) == len(target)
     return inp, target
 
@@ -159,9 +161,10 @@ def example_generator(vocab, train_x_path, train_y_path, test_x_path, max_enc_le
         train_dataset = tf.data.Dataset.zip((dataset_train_x, dataset_train_y))
         train_dataset = train_dataset.shuffle(16, reshuffle_each_iteration=True).repeat()
         # i = 0
+        #一行为一个样本
         for raw_record in train_dataset:
-            article = raw_record[0].numpy().decode("utf-8")
-            abstract = raw_record[1].numpy().decode("utf-8")
+            article = raw_record[0].numpy().decode("utf-8")     #dataset_train_x
+            abstract = raw_record[1].numpy().decode("utf-8")    #dataset_train_y
 
             start_decoding = vocab.word_to_id(START_DECODING)
             stop_decoding = vocab.word_to_id(STOP_DECODING)
@@ -174,6 +177,7 @@ def example_generator(vocab, train_x_path, train_y_path, test_x_path, max_enc_le
             sample_encoder_pad_mask = [1 for _ in range(enc_len)]
             # print('sample_encoder_pad_mask is', sample_encoder_pad_mask)
 
+            #word2id
             enc_input = [vocab.word_to_id(w) for w in article_words]
             # print('enc_inp shape is final for dataset:', len(enc_input))
             enc_input_extend_vocab, article_oovs = article_to_ids(article_words, vocab)
@@ -249,7 +253,7 @@ def batch_generator(generator, vocab, train_x_path, train_y_path,
                     test_x_path, max_enc_len, max_dec_len, batch_size, mode):
     dataset = tf.data.Dataset.from_generator(lambda: generator(vocab, train_x_path, train_y_path, test_x_path,
                                                                max_enc_len, max_dec_len, mode, batch_size),
-                                             output_types={
+                                             output_types={     #x部分
                                                  "enc_len": tf.int32,
                                                  "enc_input": tf.int32,
                                                  "enc_input_extend_vocab": tf.int32,
@@ -263,7 +267,7 @@ def batch_generator(generator, vocab, train_x_path, train_y_path,
                                                  "sample_decoder_pad_mask": tf.int32,
                                                  "sample_encoder_pad_mask": tf.int32,
                                              },
-                                             output_shapes={
+                                             output_shapes={    #y部分
                                                  "enc_len": [],
                                                  "enc_input": [None],
                                                  "enc_input_extend_vocab": [None],
@@ -324,10 +328,15 @@ def batch_generator(generator, vocab, train_x_path, train_y_path,
     return dataset
 
 
-def batcher(vocab, hpm):
-    dataset = batch_generator(example_generator, vocab, hpm["train_seg_x_dir"], hpm["train_seg_y_dir"],
-                              hpm["test_seg_x_dir"], hpm["max_enc_len"],
-                              hpm["max_dec_len"], hpm["batch_size"], hpm["mode"])
+def batcher(vocab, params):
+    '''
+    vocab:字典对象
+    params：参数,也就是run.py中定义的参数
+    '''
+    #dataset为tensorflow的数据格式（tensorflow的3种数据格式）
+    dataset = batch_generator(example_generator, vocab, params["train_seg_x_dir"], params["train_seg_y_dir"],
+                              params["test_seg_x_dir"], params["max_enc_len"],
+                              params["max_dec_len"], params["batch_size"], params["mode"])
 
     return dataset
 
