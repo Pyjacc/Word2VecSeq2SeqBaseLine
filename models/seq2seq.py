@@ -17,7 +17,6 @@ class SequenceToSequence(tf.keras.Model):
                                        batch_size=params["batch_size"])
 
         self.attention = attention.BahdanauAttention(units=params["attn_units"])    #attention_units
-        # self.attention = decoder.BahdanauAttention(units=params["attn_units"])
 
         self.decoder = decoder.Decoder(vocab_size=params["vocab_size"],
                                        embedding_dim=params["embed_size"],

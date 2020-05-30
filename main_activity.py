@@ -90,8 +90,8 @@ def params_set():
 
 
     # 为将代码跑通,可将steps_per_epoch和epochs的值设置较小的值(节省时间)
-    parser.add_argument("--steps_per_epoch", default=20, type=int, help="max_train_steps")
-    parser.add_argument("--epochs", default=1, type=int, help="train epochs")
+    parser.add_argument("--steps_per_epoch", default=200, type=int, help="max_train_steps")
+    parser.add_argument("--epochs", default=5, type=int, help="train epochs")
     parser.add_argument("--checkpoints_save_steps", default=10, type=int, help="Save checkpoints every N steps")
     parser.add_argument("--max_steps", default=10000, type=int, help="Max number of iterations")
     parser.add_argument("--num_to_test", default=10, type=int, help="Number of examples to test")
@@ -99,7 +99,7 @@ def params_set():
 
 
     # set train or test mode here
-    parser.add_argument("--mode", default='test', help="training, eval or test options")
+    parser.add_argument("--mode", default='train', help="training, eval or test options")
     parser.add_argument("--model", default='SequenceToSequence', help="which model to be slected")
     parser.add_argument("--pointer_gen", default=True, help="training, eval or test options")
     parser.add_argument("--is_coverage", default=True, help="is_coverage")
@@ -114,10 +114,12 @@ def params_set():
 def train_test_seq2seq(params):
     # 训练seq2seq模型
     if params["mode"] == "train":
+        print("train start")
         training.train(params)
         print("train success！")
 
     elif params["mode"] == "test":
+        print("test start")
         test_and_save(params)
         print("test success")
 

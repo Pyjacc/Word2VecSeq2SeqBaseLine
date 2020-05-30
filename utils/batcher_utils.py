@@ -84,6 +84,7 @@ def abstract_to_ids(abstract_words, vocab, article_oovs):
                 ids.append(unk_id)  # Map to the UNK token id
         else:
             ids.append(i)
+
     return ids
 
 
@@ -149,7 +150,7 @@ def get_dec_inp_targ_seqs(sequence, max_len, start_id, stop_id):
         #此处应该添加pad操作,补齐长度
 
         target.append(stop_id)  # end token：添加结束标记
-    assert len(inp) == len(target)
+    # assert len(inp) == len(target)
     return inp, target
 
 
@@ -185,9 +186,17 @@ def example_generator(vocab, train_x_path, train_y_path, test_x_path, max_enc_le
             abstract_sentences = [""]
             abstract_words = abstract.split()
             abs_ids = [vocab.word_to_id(w) for w in abstract_words]
-            abs_ids_extend_vocab = abstract_to_ids(abstract_words, vocab, article_oovs)
             dec_input, target = get_dec_inp_targ_seqs(abs_ids, max_dec_len, start_decoding, stop_decoding)
-            _, target = get_dec_inp_targ_seqs(abs_ids_extend_vocab, max_dec_len, start_decoding, stop_decoding)
+
+            # abs_ids_extend_vocab中包含oov的词
+            # abs_ids_extend_vocab = abstract_to_ids(abstract_words, vocab, article_oovs)
+
+            # 如果不注释掉此处,decoder的输入(target)中会包含oov的词,可能会出现越界，会报如下错误：
+            # tensorflow.python.framework.errors_impl.InvalidArgumentError:
+            # indices[0,0] = 30009 is not in [0, 30000) [Op:ResourceGather]
+            # name: sequence_to_sequence/decoder/embedding_1/embedding_lookup/
+            # target和损失函数有关系
+            # _, target = get_dec_inp_targ_seqs(abs_ids_extend_vocab, max_dec_len, start_decoding, stop_decoding)
 
             dec_len = len(dec_input)
             # 添加mark标记
@@ -337,7 +346,6 @@ def batcher(vocab, params):
     dataset = batch_generator(example_generator, vocab, params["train_seg_x_dir"], params["train_seg_y_dir"],
                               params["test_seg_x_dir"], params["max_enc_len"],
                               params["max_dec_len"], params["batch_size"], params["mode"])
-
     return dataset
 
 

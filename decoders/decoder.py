@@ -145,4 +145,5 @@ class Decoder(tf.keras.Model):
 
         # pred shape == (batch_size, vocab)
         pred = self.fc(dec_output)
+
         return pred, dec_hidden

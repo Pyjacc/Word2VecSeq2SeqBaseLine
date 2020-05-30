@@ -202,3 +202,4 @@ if __name__ == "__main__":
     print("train model time: %d seconds" % (end_time - start_time))
 
     load_save_model(w2v_bin_path, vocab_path, save_model_txt_path)
+    print("load_save_model success")
