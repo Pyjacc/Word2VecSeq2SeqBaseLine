@@ -10,6 +10,14 @@
 
 
 
+遗留问题：
+（1）batcher_utils.py中如果不注释掉abs_ids_extend_vocab = abstract_to_ids(abstract_words, vocab, article_oovs)和
+_, target = get_dec_inp_targ_seqs(abs_ids_extend_vocab, max_dec_len, start_decoding, stop_decoding)，就会报如下错误：
+tensorflow.python.framework.errors_impl.InvalidArgumentError:
+indices[0,0] = 30009 is not in [0, 30000) [Op:ResourceGather]
+name: sequence_to_sequence/decoder/embedding_1/embedding_lookup/
+
+（2）test的结果全部为unk
 
 
 
